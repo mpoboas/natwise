@@ -1,0 +1,46 @@
+@startuml DomainModel
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Client {
+    - name
+    - email 
+    - phone
+    - address
+    - password
+}
+
+class Account {
+    - password
+    - username
+    - accountname
+    - Client
+    - balance
+    - type
+    - openDate
+    - status
+}
+
+class Transfers {
+    - originAccount
+    - destinyAccount
+    - value
+    - date
+    - status
+    - description
+}
+
+class TransferHistory {
+    - account
+    - transfers
+    - dataInitial
+    - dataFinal
+}
+
+Client "1"-"*" Account
+Account "*"-"1" Transfers
+Account "1"-"1" TransferHistory
+
+@enduml

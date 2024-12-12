@@ -1,0 +1,11 @@
+@startuml LogicalView
+
+package View {
+}
+
+package natwise {
+}
+
+View - natwise : HTTP request
+
+@enduml

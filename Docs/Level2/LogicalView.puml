@@ -1,0 +1,16 @@
+@startuml LogicalView
+
+package View {
+}
+
+package natwise {
+    [API]
+    [ServiceLayer]
+    [DataManagement]
+}
+
+View - API : HTTP request
+API - ServiceLayer : Process Requests
+ServiceLayer - DataManagement : Persist Data
+
+@enduml
