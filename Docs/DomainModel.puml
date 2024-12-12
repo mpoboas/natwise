@@ -40,7 +40,8 @@ class TransferHistory {
 }
 
 Client "1"-"*" Account
-Account "*"-"1" Transfers
-Account "1"-"1" TransferHistory
+Account "*"-"*" Transfers
+Account "*"-"1" TransferHistory
+Transfers "*"-"1" TransferHistory
 
 @enduml
