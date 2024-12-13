@@ -16,16 +16,25 @@ class Account {
     - password
     - username
     - accountname
-    - Client
+    - client
     - balance
     - type
     - openDate
     - status
 }
 
-class Transfers {
+class Transfer {
     - originAccount
     - destinyAccount
+    - value
+    - date
+    - status
+    - description
+}
+
+class Transaction {
+    - account
+    - type
     - value
     - date
     - status
