@@ -1,81 +1,94 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import Message from "primevue/message";
+import { ref, onMounted } from 'vue';
+import {ElButton, ElInput, ElMessage, ElText} from 'element-plus';
+const router = useRouter();
+const user = useSupabaseUser()
+const { auth } = useSupabaseClient()
 
-const supabase = useSupabaseClient();
+watchEffect(() => {
+  if (user.value) {
+    navigateTo('/')
+  }
+})
 
 const email = ref('');
 const password = ref('');
-const error = ref('');
-
-const router = useRouter();
+const error = ref<string | null>(null);
 
 const signIn = async () => {
-  error.value = ''; // Reset error message
-  const { data, error: signInError } = await supabase.auth.signInWithPassword({
+  error.value = ''; // Reset error message before sign-in attempt
+
+  const { data, error: signInError } = await auth.signInWithPassword({
     email: email.value,
     password: password.value,
   });
 
   if (signInError) {
-    error.value = signInError.message;
+    ElMessage({
+      message: 'An error occurred. ' + signInError.message,
+      type: 'error',
+    });
   } else if (data?.user) {
-    router.push('/'); // Redirect to /admin
+    ElMessage({
+      message: 'Sign in successful.',
+      type: 'success',
+    });
+    router.push('/'); // Redirect to home if login is successful
   } else {
-    // Handle the case where there's no error but also no user data
-    error.value = 'Login failed: No user data received.';
+    ElMessage({
+      message: 'An error occurred. Please try again.',
+      type: 'error',
+    });
   }
 };
 
-const handleSubmit = async (event: Event) => {
-  event.preventDefault();
-  await signIn();
+// function to compute 16px from the bottom of the viewport
+const getOffset = () => {
+  const offset = window.innerHeight - 100;
+  return offset;
 };
 </script>
 
 <template>
+  <Head>
+    <Title>Login - Natwise</Title>
+  </Head>
   <header class="flex items-center justify-center min-h-screen">
     <div class="card p-6 shadow-lg rounded-lg text-center max-w-sm w-full">
       <h1 class="text-2xl font-bold mb-4">Login</h1>
 
       <!-- Form with email and password fields -->
-      <form @submit="handleSubmit">
-        <!-- Email Input -->
-        <div class="mb-4">
-          <InputText
-              v-model="email"
-              type="email"
-              placeholder="Enter your email"
-              class="w-full"
-          />
-        </div>
+      <div class="mb-4">
+        <el-input
+            v-model="email"
+            type="text"
+            placeholder="Enter your email"
+            class="w-full"
+            required
+        />
+      </div>
 
-        <!-- Password Input -->
-        <div class="mb-4">
-          <InputText
-              v-model="password"
-              type="password"
-              placeholder="Enter your password"
-              class="w-full"
-          />
-        </div>
+      <div class="mb-4">
+        <el-input
+            v-model="password"
+            type="password"
+            placeholder="Enter your password"
+            class="w-full"
+            show-password
+            required
+        />
+      </div>
 
-        <!-- Error Message Display -->
-        <div v-if="error" class="mb-4">
-          <Message severity="error" text="error" />
-        </div>
+      <!-- Sign In Button -->
+      <el-button type="primary" class="w-full" @click="signIn">Sign In</el-button>
 
-        <!-- Submit Button -->
-        <Button type="submit" label="Sign In" class="w-full" />
-        <p class="mt-4">
-          Don't have an account? <router-link to="/signup">Sign Up</router-link>
-        </p>
-      </form>
-
+      <p class="mt-4">
+        Don't have an account?
+        <router-link to="/signup">
+          <el-button link>Sign Up</el-button>
+        </router-link>
+      </p>
     </div>
   </header>
 </template>
-

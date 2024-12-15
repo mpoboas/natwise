@@ -1,0 +1,55 @@
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+body {
+    font-family: var(--font-family-primary);
+    }
+
+:root {
+    --font-family-primary: 'Inter', sans-serif;
+    /* Primary Color */
+    --el-color-primary: #6a0dad; /* Deep Purple */
+
+    /* Derived Colors */
+    --el-color-primary-light-3: #8b5fbf; /* 30% lighter */
+    --el-color-primary-light-5: #a680d1; /* 50% lighter */
+    --el-color-primary-light-7: #c1a2e3; /* 70% lighter */
+    --el-color-primary-dark-2: #550c91; /* 20% darker */
+
+    /* Success */
+    --el-color-success: #4caf50; /* Complementary Green */
+    --el-color-success-light: #81c784;
+    --el-color-success-dark: #388e3c;
+
+    /* Warning */
+    --el-color-warning: #ffa726; /* Warm Orange */
+    --el-color-warning-light: #ffcc80;
+    --el-color-warning-dark: #fb8c00;
+
+    /* Danger */
+    --el-color-danger: #e53935; /* Rich Red */
+    --el-color-danger-light: #ef9a9a;
+    --el-color-danger-dark: #b71c1c;
+
+    /* Info */
+    --el-color-info: #2196f3; /* Cool Blue */
+    --el-color-info-light: #64b5f6;
+    --el-color-info-dark: #1565c0;
+
+    /* Text Colors */
+    --el-text-color-primary: #2c2c2c; /* Dark Gray */
+    --el-text-color-regular: #595959;
+    --el-text-color-secondary: #8c8c8c;
+    --el-text-color-placeholder: #bfbfbf;
+
+    /* Border Colors */
+    --el-border-color: #d9d9d9; /* Light Gray */
+    --el-border-color-light: #eaeaea;
+    --el-border-color-dark: #bfbfbf;
+
+    /* Background Colors */
+    --el-bg-color: #f7f7f7; /* Light Background */
+    --el-bg-color-page: #ffffff; /* White Background */
+}
+
+

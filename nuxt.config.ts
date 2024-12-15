@@ -1,19 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import Aura from "@primevue/themes/aura";
-
 export default defineNuxtConfig({
-  devtools: { enabled: false },
-  modules: ["@nuxtjs/tailwindcss", "@primevue/nuxt-module",'@nuxtjs/supabase'],
-  supabase: {
+    devtools: { enabled: false },
+    modules: ["@nuxtjs/tailwindcss", '@nuxtjs/supabase'],
+    supabase: {
       redirect: false,
-  },
-  primevue: {
-      options: {
-          theme: {
-              preset: Aura,
-          }
-      },
-      autoImport: true,
-  },
+    },
+    css: ['element-plus/dist/index.css',
+          '~/assets/styles/global.css'
+    ],
     compatibilityDate: "2024-12-12",
 });

@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import InputMask from 'primevue/inputmask';
-import Textarea from 'primevue/textarea';
-import Message from 'primevue/message';
+import { ElButton, ElInput, ElText, ElMessage } from 'element-plus';
 
 const supabase = useSupabaseClient();
+const router = useRouter();
 const name = ref('');
 const email = ref('');
 const phone = ref('');
@@ -42,22 +39,34 @@ const signUp = async () => {
     if (insertError) throw insertError;
 
     // Success message or redirect
-    alert('Sign-up successful!');
-    router.push('/login');
+    ElMessage({
+      message: 'Congrats, this is a success message.',
+      type: 'success',
+    });
+    setTimeout(() => {
+      router.push('/login');
+    }, 2000);
+
   } catch (err) {
-    error.value = err.message;
+    ElMessage({
+      message: 'An error occurred.' + err.message,
+      type: 'error',
+    });
   }
 };
 </script>
 
 <template>
+  <Head>
+    <Title>Sign Up - Natwise</Title>
+  </Head>
   <header class="flex items-center justify-center min-h-screen">
     <div class="card p-6 shadow-lg rounded-lg text-center max-w-sm w-full">
       <h2 class="text-2xl font-bold mb-4">Sign Up</h2>
       <form @submit.prevent="signUp">
         <!-- Name Input -->
         <div class="mb-4">
-          <InputText
+          <el-input
               v-model="name"
               type="text"
               placeholder="Enter your name"
@@ -68,7 +77,7 @@ const signUp = async () => {
 
         <!-- Email Input -->
         <div class="mb-4">
-          <InputText
+          <el-input
               v-model="email"
               type="email"
               placeholder="Enter your email"
@@ -79,7 +88,7 @@ const signUp = async () => {
 
         <!-- Phone Input -->
         <div class="mb-4">
-          <InputMask
+          <el-input
               v-model="phone"
               mask="(999) 999-9999"
               placeholder="Enter your phone"
@@ -90,7 +99,7 @@ const signUp = async () => {
 
         <!-- Address Input -->
         <div class="mb-4">
-          <InputText
+          <el-input
               v-model="address"
               placeholder="Enter your address"
               class="w-full"
@@ -100,22 +109,25 @@ const signUp = async () => {
 
         <!-- Password Input -->
         <div class="mb-4">
-          <InputText
+          <el-input
               v-model="password"
               type="password"
               placeholder="Enter your password"
               class="w-full"
               required
+              show-password
           />
         </div>
 
-        <!-- Error Message -->
-        <div v-if="error" class="mb-4">
-          <Message severity="error" text="error" />
-        </div>
-
         <!-- Submit Button -->
-        <Button type="submit" label="Sign Up" class="w-full" />
+        <el-button type="primary" class="w-full" native-type="submit">Sign Up</el-button>
+
+        <p class="mt-4">
+          Already have an account?
+          <router-link to="/login">
+            <el-button link>Login</el-button>
+          </router-link>
+        </p>
       </form>
     </div>
   </header>
