@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { ElButton } from 'element-plus';
+const user = useSupabaseUser()
+
+watchEffect(() => {
+  if (user.value) {
+    navigateTo('/dashboard')
+  }
+})
 </script>
 
 <template>

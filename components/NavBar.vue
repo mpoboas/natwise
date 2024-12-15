@@ -25,12 +25,6 @@ const getUser = async () => {
   }
 };
 
-onMounted(() => {
-  if (user.value) {
-    getUser();
-  }
-});
-
 watchEffect(() => {
   if (user.value) {
     getUser();
@@ -47,8 +41,11 @@ const logout = async () => {
 
 <template>
   <nav class="flex items-center justify-between p-4 mx-auto bg-purple-800 text-white">
-    <div class="flex space-x-14">
-      <router-link to="/">
+    <div class="flex space-x-10">
+      <router-link v-if="userInfo" to="/dashboard">
+        <p class="text-2xl font-bold">Natwise</p>
+      </router-link>
+      <router-link v-else to="/">
         <p class="text-2xl font-bold">Natwise</p>
       </router-link>
       <p v-if="userInfo" class="text-2xl">Welcome, {{ userInfo.name || 'User' }}!</p>
