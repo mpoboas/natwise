@@ -13,8 +13,6 @@ class Client {
 }
 
 class Account {
-    - password
-    - username
     - accountname
     - client
     - balance
@@ -28,7 +26,6 @@ class Transfer {
     - destinyAccount
     - value
     - date
-    - status
     - description
 }
 
@@ -37,20 +34,19 @@ class Transaction {
     - type
     - value
     - date
-    - status
     - description
 }
 
 class TransferHistory {
     - account
     - transfers
-    - dataInitial
-    - dataFinal
 }
 
 Client "1"-"*" Account
-Account "*"-"*" Transfers
+Account "*"-"*" Transfer
 Account "*"-"1" TransferHistory
-Transfers "*"-"1" TransferHistory
+Transfer "*"-"1" TransferHistory
+Account "*"-"*" Transaction
+Transaction "1"-d-"*" TransferHistory
 
 @enduml
