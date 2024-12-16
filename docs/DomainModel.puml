@@ -4,7 +4,7 @@ skinparam classAttributeIconSize 0
 hide circle
 hide methods
 
-class Client {
+class User {
     - name
     - email 
     - phone
@@ -14,7 +14,7 @@ class Client {
 
 class Account {
     - accountname
-    - client
+    - user
     - balance
     - type
     - openDate
@@ -42,7 +42,7 @@ class TransferHistory {
     - transfers
 }
 
-Client "1"-"*" Account
+User "1"-"*" Account
 Account "*"-"*" Transfer
 Account "*"-"1" TransferHistory
 Transfer "*"-"1" TransferHistory

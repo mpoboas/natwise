@@ -26,10 +26,12 @@
       </div>
       <div class="mt-5 max-w-80">
         <el-card>
+          <router-link to="/createAccount">
           <div class="flex flex-row items-center justify-items-center space-x-2">
             <p class="text-lg">Create New Account</p>
             <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"></path></svg>
           </div>
+          </router-link>
         </el-card>
       </div>
     </div>
