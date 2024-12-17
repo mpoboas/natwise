@@ -40,7 +40,7 @@ const signUp = async () => {
 
     // Success message or redirect
     ElMessage({
-      message: 'Congrats, this is a success message.',
+      message: 'Sign up was successful.',
       type: 'success',
     });
     setTimeout(() => {

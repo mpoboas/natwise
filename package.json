@@ -9,6 +9,7 @@
     "preview": "nuxt preview"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "@nuxtjs/supabase": "^1.4.4",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@supabase/supabase-js": "^2.47.7",
