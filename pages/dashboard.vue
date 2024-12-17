@@ -7,6 +7,7 @@
     <div class="grid grid-cols-5 gap-3">
       <!-- Existing Accounts -->
       <div v-for="account in accounts" :key="account.id" class="mt-5 max-w-80">
+        <router-link :to="`/account/${account.id}`">
         <el-card>
           <template #header>
             <div class="card-header">
@@ -26,6 +27,7 @@
             </div>
           </template>
         </el-card>
+      </router-link>
       </div>
 
       <!-- "Create New Account" Card -->
