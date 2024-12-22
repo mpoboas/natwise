@@ -5,7 +5,12 @@ import {
   ElButton,
   ElDivider,
   ElTable,
-  ElTableColumn
+  ElTableColumn,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElInputNumber,
+  ElDialog,
 } from "element-plus";
 
 const client = useSupabaseClient();
@@ -13,30 +18,52 @@ const account = ref(null);
 const accountHistory = ref([]);
 const route = useRoute();
 const showModal = ref(false);
-const transferAmount = ref(null);
+const transferAmount = ref({
+  iban: '',
+  amount: 0,
+  description: '',
+});
+
+const transactionForm = ref({
+  type: 'deposit',
+  amount: 0,
+  description: '',
+});
 const toAccount = ref('');
+const showTransferModal = ref(false);
+const showTransactionModal = ref(false);
 
-const openTransferModal = () => {
-    showModal.value = true;
-};
+// Transfer function
+const submitTransfer = async () => {
+  const { iban, amount, description } = transferAmount.value;
 
-const closeTransferModal = () => {
-    showModal.value = false;
-    transferAmount.value = null;
-    toAccount.value = '';
-};
+  // Validação básica
+  if (!iban || amount <= 0) {
+    console.error("IBAN ou valor inválido.");
+    return;
+  }
 
-const submitTransfer = () => {
-    console.log('Transfer Details:', {
-        amount: transferAmount.value,
-        toAccount: toAccount.value,
-    });
+  const dest_account = await getAccountIdByIban(iban);
+  console.log(dest_account);
+  console.log(account.value.id);
+  // Geração da transação
+  const { error } = await client.from("transfers").insert([
+    {
+      origin_account: account.value.id,
+      destination_account: dest_account,
+      amount,
+      description,
+      date: new Date().toISOString(),
+    },
+  ]);
 
-    // Simulating transfer and closing the modal
-    closeTransferModal();
-
-    // Optionally, you can redirect or display a success message here
-    alert(`Transfer of ${transferAmount.value} to account ${toAccount.value} confirmed!`);
+  if (error) {
+    console.error("Error submitting transfer:", error);
+  } else {
+    showTransferModal.value = false; // Fecha o modal
+    transferAmount.value = { iban: "", amount: 0, description: "" }; // Reseta o formulário
+    await fetchHistoryWithAmounts(); // Atualiza o histórico
+  }
 };
 
 const fetchAccount = async () => {
@@ -108,12 +135,11 @@ const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString();
 };
 
-const test = async () => {
+const getAccountIdByIban = async (iban : string) => {
     const { data } = await client
-        .rpc('get_account_id_by_iban', { input_iban: 'PT503197403148062616' })
+        .rpc('get_account_id_by_iban', { input_iban: iban })
     console.log(data);
-
-
+  return data;
 }
 onMounted(() => {
     fetchAccount();
@@ -143,10 +169,39 @@ onMounted(() => {
       </div>
         <el-divider direction="vertical" class="h-full" style="height: 100vh"/>
 
+      <el-dialog
+          v-model="showTransferModal"
+          title="Transfer"
+          width="30%"
+          center
+      >
+        <el-form :model="transferAmount" class="w-full">
+          <el-form-item label="Account IBAN">
+            <el-input v-model="transferAmount.iban" placeholder="IBAN" />
+          </el-form-item>
+          <el-form-item label="Amount">
+            <el-input-number v-model="transferAmount.amount" :min="0">
+              <template #prefix>
+                <span>€</span>
+              </template>
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="Description">
+            <el-input v-model="transferAmount.description" placeholder="Description" />
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="showTransferModal = false">Cancel</el-button>
+            <el-button type="primary" @click="submitTransfer">Transfer</el-button>
+          </span>
+        </template>
+      </el-dialog>
+
       <div class="w-[70%]">
         <div class="flex flex-row space-x-3 mb-4">
           <el-button type="primary" @click="newTransaction">New Transaction</el-button>
-          <el-button type="success" @click="newTransfer">New Transfer</el-button>
+          <el-button type="success" @click="showTransferModal = true">New Transfer</el-button>
         </div>
 
         <el-table :data="historyWithAmounts" style="width: 100%">
