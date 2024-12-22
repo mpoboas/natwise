@@ -25,7 +25,7 @@ class Account {
 class Transfer {
     - ibanOrigin
     - ibanDestiny
-    - value
+    - amount
     - date
     - description
 }
@@ -33,7 +33,7 @@ class Transfer {
 class Transaction {
     - account
     - type
-    - value
+    - amount
     - date
     - description
 }

@@ -152,6 +152,7 @@ const createAccount = async () => {
   const { error } = await client.from("accounts").insert([
     {
       user: user.value.id,
+      iban: `PT50${Math.random().toString().slice(2,18).padEnd(16, '0')}`,
       name,
       type,
       balance
