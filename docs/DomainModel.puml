@@ -23,8 +23,8 @@ class Account {
 }
 
 class Transfer {
-    - ibanOrigin
-    - ibanDestiny
+    - originAccount
+    - destinationAccount
     - amount
     - date
     - description
@@ -40,7 +40,8 @@ class Transaction {
 class History {
     - account
     - type
-    - idType
+    - typeId
+    - date
 }
 
 User "1"-"*" Account
