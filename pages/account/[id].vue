@@ -11,6 +11,8 @@ import {
   ElInput,
   ElInputNumber,
   ElDialog,
+  ElSelect,
+  ElOption,
 } from "element-plus";
 
 const client = useSupabaseClient();
@@ -25,7 +27,7 @@ const transferAmount = ref({
 });
 
 const transactionForm = ref({
-  type: 'deposit',
+  type: '',
   amount: 0,
   description: '',
 });
@@ -65,6 +67,31 @@ const submitTransfer = async () => {
     await fetchHistoryWithAmounts(); // Atualiza o histórico
   }
 };
+// Transaction function
+const submitTransaction = async () => {
+  const {type, amount} = transactionForm.value;
+
+  // Validação básica
+  if (amount <= 0) {
+    console.error("Valor inválido.");
+    return;
+  }
+  const { error } = await client.from("transactions").insert([
+    {
+      account: account.value.id,
+      type,
+      amount,
+    },
+  ]);
+
+  if (error) {
+    console.error("Error submitting transaction:", error);
+  } else {
+    showTransactionModal.value = false; // Fecha o modal
+    transactionForm.value = { type: "", amount: 0, description: "" }; // Reseta o formulário
+    await fetchHistoryWithAmounts(); // Atualiza o histórico
+  }
+}
 
 const fetchAccount = async () => {
     const { id } = route.params;
@@ -210,9 +237,43 @@ onMounted(() => {
         </template>
       </el-dialog>
 
+      <el-dialog
+          v-model="showTransactionModal"
+          title="Transaction"
+          width="30%"
+          center
+      >
+        <el-form :model="transactionForm" class="w-full">
+          <el-form-item label="Type">
+            <!-- deposit or withdraw -->
+            <el-select v-model="transactionForm.type" placeholder="Select">
+              <el-option label="Deposit" value="deposit" />
+              <el-option label="Withdraw" value="withdraw" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Amount">
+            <el-input-number v-model="transactionForm.amount" :min="0">
+              <template #prefix>
+                <span>€</span>
+              </template>
+            </el-input-number>
+          </el-form-item>
+          <el-form-item label="Description">
+            <el-input v-model="transactionForm.description" placeholder="Description" />
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="showTransactionModal = false">Cancel</el-button>
+            <el-button type="primary" @click="submitTransaction">Submit</el-button>
+          </span>
+        </template>
+      </el-dialog>
+
+
       <div class="w-[70%]">
         <div class="flex flex-row space-x-3 mb-4">
-          <el-button type="primary" @click="newTransaction">New Transaction</el-button>
+          <el-button type="primary" @click="showTransactionModal = true">New Transaction</el-button>
           <el-button type="success" @click="showTransferModal = true">New Transfer</el-button>
         </div>
 
@@ -240,5 +301,4 @@ onMounted(() => {
       </div>
     </div>
   </div>
-
 </template>

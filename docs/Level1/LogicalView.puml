@@ -6,6 +6,10 @@ package View {
 package natwise {
 }
 
+package Supabase {
+}
+
 View - natwise : HTTP request
+natwise - Supabase: Manage Data
 
 @enduml

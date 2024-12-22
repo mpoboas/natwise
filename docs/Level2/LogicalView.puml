@@ -14,7 +14,7 @@ package Supabase {
 
 View - Models : HTTP request
 Models - Controllers : Process Requests
-Conrtollers - DataManagement : Persist Data
+[Controllers] - DataManagement : Persist Data
 DataManagement - Supabase: Save Data
 
 @enduml
