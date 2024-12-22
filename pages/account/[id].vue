@@ -116,18 +116,30 @@ const getAmount = async (type: string, type_id: string) => {
     return 0;
   }
 
-  return data ? data.amount : 0;
+  return data;
 };
 
 const historyWithAmounts = ref([]);
 
 const fetchHistoryWithAmounts = async () => {
+  await getAccountHistory();
+
   historyWithAmounts.value = await Promise.all(
-      accountHistory.map(async (row) => {
+      accountHistory.value.map(async (row) => {
         const amount = await getAmount(row.type, row.type_id);
         return { ...row, amount };
       })
   );
+};
+
+const movementType = (row) => {
+  if (row.type === 'transfer') {
+    return row.origin_account === account.id ? 'outgoing' : 'incoming';
+  } else if (row.type === 'transaction') {
+    // TODO: Check if transaction is a deposit or withdraw based on the transaction type
+    return row.transaction_type === 'withdraw' ? 'withdraw' : 'deposit';
+  }
+  return 'unknown';
 };
 
 
@@ -214,7 +226,12 @@ onMounted(() => {
           <el-table-column prop="description" label="Description"></el-table-column>
           <el-table-column prop="amount" label="Amount" width="150">
             <template #default="scope">
-              <span :class="scope.row.amount < 0 ? 'text-red-500' : 'text-green-500'">
+              <span
+                  :class="{
+                  'text-red-500': movementType(scope.row) === 'outgoing' || movementType(scope.row) === 'withdraw',
+                  'text-green-500': movementType(scope.row) === 'incoming' || movementType(scope.row) === 'deposit',
+                }"
+              >
                 {{ formatCurrency(scope.row.amount) }}
               </span>
             </template>
