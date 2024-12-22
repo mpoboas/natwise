@@ -49,6 +49,6 @@ Account "*"-"*" Transfer
 Account "*"-"1" TransferHistory
 Transfer "*"-"1" TransferHistory
 Account "*"-"*" Transaction
-Transaction "1"-d-"*" TransferHistory
+Transaction "1"-d-"*" History
 
 @enduml
