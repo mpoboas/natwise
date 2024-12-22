@@ -65,6 +65,7 @@ const submitTransfer = async () => {
     showTransferModal.value = false; // Fecha o modal
     transferAmount.value = { iban: "", amount: 0, description: "" }; // Reseta o formulário
     await fetchHistoryWithAmounts(); // Atualiza o histórico
+    await fetchAccount(); // Atualiza o saldo
   }
 };
 // Transaction function
@@ -90,6 +91,7 @@ const submitTransaction = async () => {
     showTransactionModal.value = false; // Fecha o modal
     transactionForm.value = { type: "", amount: 0, description: "" }; // Reseta o formulário
     await fetchHistoryWithAmounts(); // Atualiza o histórico
+    await fetchAccount(); // Atualiza o saldo
   }
 }
 
@@ -278,21 +280,15 @@ onMounted(() => {
         </div>
 
         <el-table :data="historyWithAmounts" style="width: 100%">
-          <el-table-column prop="date" label="Date" width="180">
+          <el-table-column prop="date" label="Date" width="">
             <template #default="scope">
               {{ formatDate(scope.row.date) }}
             </template>
           </el-table-column>
-          <el-table-column prop="type" label="Type" width="120"></el-table-column>
-          <el-table-column prop="description" label="Description"></el-table-column>
-          <el-table-column prop="amount" label="Amount" width="150">
+          <el-table-column prop="type" label="Type" width=""></el-table-column>
+          <el-table-column prop="amount" label="Amount" width="">
             <template #default="scope">
-              <span
-                  :class="{
-                  'text-red-500': movementType(scope.row) === 'outgoing' || movementType(scope.row) === 'withdraw',
-                  'text-green-500': movementType(scope.row) === 'incoming' || movementType(scope.row) === 'deposit',
-                }"
-              >
+              <span>
                 {{ formatCurrency(scope.row.amount) }}
               </span>
             </template>
