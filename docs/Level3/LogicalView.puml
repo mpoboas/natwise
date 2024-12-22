@@ -1,20 +1,36 @@
 @startuml LogicalView
 
 package View {
+    component "Login" as login
+    component "Create Account" as createAccount
+    component "Create Transfer" as createTransfer
+    component "Create Transaction" as createTransaction
+    component "Update History" as updateHistory
 }
 
 package natwise {
-    [Models]
-    [Controllers]
-    [DataManagement]
+    component "Auth Service" as authService
+    component "Account Service" as accountService
+    component "Transfer Service" as transferService
+    component "Transaction Service" as transactionService
+    component "History Service" as historyService
 }
 
 package Supabase {
+    database "Auth.User" as user
+    database "Account" as account
+    database "Transfer" as transfer
+    database "Transaction" as transaction
+    database "History" as history
 }
-
-View - Models : HTTP request
-Models - Controllers : Process Requests
-Controllers - DataManagement : Persist Data
-DataManagement - Supabase: Save Data
-
+login -up- authService : HTTP request
+createAccount -up- accountService : HTTP request
+createTransfer -up- transferService : HTTP request
+createTransaction -up- transactionService : HTTP request
+updateHistory -up- historyService : HTTP request
+authService -down- user : Manage Data
+accountService -down- account : Manage Data
+transferService -down- transfer : Manage Data
+transactionService -down- transaction : Manage Data
+historyService -down- history : Manage Data
 @enduml

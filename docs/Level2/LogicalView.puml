@@ -4,17 +4,17 @@ package View {
 }
 
 package natwise {
-    [Models]
-    [Controllers]
-    [DataManagement]
+component "Auth Service" as authService
+component "Account Service" as accountService
+component "Transfer Service" as transferService
+component "Transaction Service" as transactionService
+component "History Service" as historyService
 }
 
 package Supabase {
 }
 
-View - Models : HTTP request
-Models - Controllers : Process Requests
-[Controllers] - DataManagement : Persist Data
-DataManagement - Supabase: Save Data
+View -- natwise : HTTP request
+natwise - Supabase: Management Data
 
 @enduml
